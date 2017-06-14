@@ -1,6 +1,5 @@
 describe 'Expectation machers' do
 
-
   describe 'equivalent matchers' do
 
 		it 'will match loose equality with #eq' do
@@ -35,5 +34,5 @@ describe 'Expectation machers' do
 		end
 
   end
-  
+
 end
