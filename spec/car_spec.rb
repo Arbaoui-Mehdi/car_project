@@ -12,7 +12,6 @@ describe Car do
 		end
 
 		it "allows reading and writing for :year" do
-			pending('Debugging a problem')
 			car.year = 2017
 			expect(car.year).to eq(2017)	
 		end
