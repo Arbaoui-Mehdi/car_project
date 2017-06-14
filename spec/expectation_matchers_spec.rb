@@ -1,4 +1,4 @@
-describe 'Expectation machers' do
+describe 'Expectation Matchers' do
 
   #
   #
@@ -194,6 +194,62 @@ describe 'Expectation machers' do
       expect(10).to satisfy do |value|
         (value >= 5) && (value <= 10) && (value % 2 == 0)
       end
+    end
+
+  end
+
+  #
+  #
+  # Predicate Matchers
+  describe 'predicate matchers' do
+
+		it 'will match be_* to custom methods ending in ?' do
+      # drops "be_", adds "?" to end, calls method on object
+      # Can use these when methods nd in "?", require no arguments,
+      # and return false/true
+
+      # with built-in methods
+			expect([]).to be_empty            # [].empty?
+      expect(1).to be_integer           # 1.integer?
+      expect(0).to be_zero              # 0.zero?
+			expect(1).to be_nonzero           # 1.nonzero?
+      expect(1).to be_odd               # 1.odd?
+      expect(2).to be_even              # 1.even?
+      expect(nil).to be_nil             # nil.nil?
+
+      # with custom methods
+      class Product
+				def visible?
+					true
+				end
+			end
+      product = Product.new
+			
+      expect(product).to be_visible         # product.visible?
+      expect(product.visible?).to be true   # exactly the as the previous ex
+
+    end
+
+    it 'will match have_* to custom methods like has_*?' do
+			# changes "have_" to "has_", add "?" to end, calls method on object
+      # Can use these when methods start with "has_", end in "?"
+      # and return true/false. Can have argument, but not required
+
+      # with built-in methods
+      hash = { :a => 1, :b => 2 }
+      expect(hash).to have_key(:a)       # hash.has_key
+      expect(hash).to have_value(2)      # hash.has_value?
+
+      # with custom methods
+			class Customer
+				def has_pending_order?
+					true
+				end
+			end
+      customer = Customer.new
+      expect(customer).to have_pending_order # customer.has_pending_order?
+      expect(customer.has_pending_order?).to be true
+
     end
 
   end
