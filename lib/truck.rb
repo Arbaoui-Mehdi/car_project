@@ -6,7 +6,7 @@ class Truck
 
   def initialize(options = {})
     self.make = options[:make] || 'Ford'
-    self.year = options[:year] || 2007.to_i
+    self.year = (options[:year] || 2007).to_i
     self.color = options[:color] || 'unknown'
     @wheels = 4
   end
