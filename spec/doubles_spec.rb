@@ -50,7 +50,7 @@ describe 'Doubles' do
 
   #
   #
-  # With Partial Test Doubles
+  # Partial Test Doubles
   context 'with partial test doubles' do
 
     it 'allows stubbing instance methods on Ruby Classes' do
@@ -119,6 +119,83 @@ describe 'Doubles' do
       customers = Customer.all
       expect(customers[1].name).to eq('Mary')
 
+    end
+
+  end
+
+  #
+  #
+  # Message Expectations
+  context 'with message expectations' do
+
+    it 'expects a call and allows a response' do
+      dbl = double('Chant')
+      expect(dbl).to receive(:hey!).and_return('Ho!')
+
+      dbl.hey!
+    end
+
+    it 'does not matter which order' do
+      dbl = double('Multi-Step Process')
+
+      expect(dbl).to receive(:step_1)
+      expect(dbl).to receive(:step_2)
+
+      dbl.step_2
+      dbl.step_1
+
+    end
+
+    it 'works with #ordered when order matters' do
+      dbl = double('Multi-step Process')
+
+      expect(dbl).to receive(:step_1).ordered
+      expect(dbl).to receive(:step_2).ordered
+
+      dbl.step_1
+      dbl.step_2
+    end
+
+  end
+
+  #
+  #
+  # Argument Constraints
+  context 'with argument constrains' do
+
+    it 'expects arguments will match' do
+      dbl = double('Customer List')
+      expect(dbl).to receive(:sort).with('name')
+      dbl.sort('name')
+    end
+
+    it 'passes when any arguments are allowed' do
+      dbl = double('Customer List')
+      # The default if you don't use #with
+      expect(dbl).to receive(:sort).with(any_args)
+      dbl.sort('name')
+    end
+
+    it 'works the same with multiple arguments' do
+      dbl = double('Customer List')
+      expect(dbl).to receive(:sort).with('name', 'asc', true)
+      dbl.sort('name', 'asc', true)
+    end
+
+    it 'allows constraining only some arguments' do
+      dbl = double('Customer List')
+      expect(dbl).to receive(:sort).with('name', anything, anything)
+      dbl.sort('name', 'asc', true)
+    end
+
+    it 'allows using other matchers' do
+      dbl = double('Customer List')
+      expect(dbl).to receive(:sort).with(
+        a_string_starting_with('n'),
+        an_object_eq_to('asc') | an_object_eq_to('desc'),
+        boolean
+      )
+      dbl.sort('name', 'asc', true)
     end
 
   end
