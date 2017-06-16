@@ -1,4 +1,3 @@
-require 'awesome_print'
 describe 'Doubles' do
 
   it 'allows stubbing methods' do
@@ -279,6 +278,38 @@ describe 'Doubles' do
       # allow(customer).to receive(:send_invoice)
       customer.send_invoice
       expect(customer).to have_received(:send_invoice)
+    end
+
+    #
+    #
+    context 'using let and a before hook' do
+      let(:order) do
+        spy(
+          'Order',
+          :process_line_items => nil,
+          :charge_credit_card => true,
+          :send_confirmation_email => true
+        )
+      end
+
+      before(:example) do
+        order.process_line_items
+        order.charge_credit_card
+        order.send_confirmation_email
+      end
+
+      it 'call #process_line_items on the order' do
+        expect(order).to have_received(:process_line_items)
+      end
+
+      it 'call #charge_credit_card on the order' do
+        expect(order).to have_received(:charge_credit_card)
+      end
+
+      it 'call #send_confirmation_email on the order' do
+        expect(order).to have_received(:send_confirmation_email)
+      end
+
     end
 
   end
