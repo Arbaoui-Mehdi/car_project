@@ -252,4 +252,35 @@ describe 'Doubles' do
 
   end
 
+  #
+  #
+  # Spying abilities
+  context 'with spying abilities' do
+
+    it 'can expect a call after it is received' do
+      dbl = spy('Chant')
+      allow(dbl).to receive(:hey!).and_return('Ho!')
+      dbl.hey!
+      expect(dbl).to have_received(:hey!)
+    end
+
+    it 'can use message constraints' do
+      dbl = spy('Chant')
+      allow(dbl).to receive(:hey!).and_return('Ho!')
+      dbl.hey!
+      dbl.hey!
+      dbl.hey!
+      expect(dbl).to have_received(:hey!).with(no_args).exactly(3).times
+    end
+
+    it 'can expect any message already sent to a declared spy' do
+      customer = spy('Customer')
+      # Notice that we don't stub :send invoice
+      # allow(customer).to receive(:send_invoice)
+      customer.send_invoice
+      expect(customer).to have_received(:send_invoice)
+    end
+
+  end
+
 end
