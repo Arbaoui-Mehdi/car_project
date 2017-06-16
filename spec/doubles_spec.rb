@@ -50,7 +50,7 @@ describe 'Doubles' do
 
   #
   #
-  # With Partial Test Doubles
+  # Partial Test Doubles
   context 'with partial test doubles' do
 
     it 'allows stubbing instance methods on Ruby Classes' do
@@ -119,6 +119,41 @@ describe 'Doubles' do
       customers = Customer.all
       expect(customers[1].name).to eq('Mary')
 
+    end
+
+  end
+
+  #
+  #
+  # Message Expectations
+  context 'with message expectations' do
+
+    it 'expects a call and allows a response' do
+      dbl = double('Chant')
+      expect(dbl).to receive(:hey!).and_return('Ho!')
+
+      dbl.hey!
+    end
+
+    it 'does not matter which order' do
+      dbl = double('Multi-Step Process')
+
+      expect(dbl).to receive(:step_1)
+      expect(dbl).to receive(:step_2)
+
+      dbl.step_2
+      dbl.step_1
+
+    end
+
+    it 'works with #ordered when order matters' do
+      dbl = double('Multi-step Process')
+
+      expect(dbl).to receive(:step_1).ordered
+      expect(dbl).to receive(:step_2).ordered
+
+      dbl.step_1
+      dbl.step_2
     end
 
   end
